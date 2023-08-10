@@ -6,14 +6,12 @@ import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.sql.Time;
 import java.time.LocalTime;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
 import java.util.logging.Level;
 
 public class SLogger {
@@ -22,10 +20,14 @@ public class SLogger {
     private final int logColorRight;
     private final Plugin plugin;
     
+    /**
+     * Create a new instance with the default colors
+     * @param plugin the minecraft plugin which will be used to prefix the messages
+     */
     public SLogger(Plugin plugin){
         this(plugin,
                 0xffee00,
-                0x00e6e0
+                0xe600da
         );
     }
     
@@ -41,6 +43,7 @@ public class SLogger {
      * @param rightColor The new right color. Set to null to keep the old color.
      * @return A new {@link SLogger} with the new colors.
      */
+    @Contract("!null, !null -> new")
     public SLogger withColors(@Nullable Integer leftColor, @Nullable Integer rightColor){
         return new SLogger(this.plugin,leftColor != null ? leftColor : this.logColorLeft, rightColor != null ? rightColor : this.logColorRight);
     }
@@ -59,7 +62,7 @@ public class SLogger {
      * @param simplified Whether to use the simplified printing mode or not. <b>The simplified mode is much faster than the default one (up to 6 times faster)</b>
      */
     public void logAdmin(Object object, boolean simplified){
-        logAdmin(object,true,false,false);
+        logAdmin(object,simplified,!simplified,!simplified);
     }
     
     /**
@@ -71,18 +74,7 @@ public class SLogger {
      */
     public void logAdmin(Object object, boolean sendPlayer, boolean includeLine, boolean color) {
         
-        String objectString = object != null ? object.toString() : "⚠ null ⚠";
-        if(!Objects.isNull(object)){
-            if(object instanceof Map<?,?> map){
-                StringBuilder builder = new StringBuilder();
-                
-            } else if(object instanceof Set<?> set){
-                StringBuilder builder = new StringBuilder(set.getClass().getSimpleName()+": [");
-                for(Object o : set){
-                    builder.append("\n -").append(o.toString());
-                }
-            }
-        }
+        String objectString = object != null ? getFormattedString(object) : "⚠ null ⚠";
         
         // TODO : proper integration of this
         String pluginname = plugin.getName();
@@ -115,9 +107,10 @@ public class SLogger {
     }
     
     private String getFormattedString(Object object){
-        StringBuilder builder = new StringBuilder();
         
-        return builder.toString();
+        //TODO : Different formatting for specific classes
+        
+        return object.toString();
     }
     
     public static Component gradientText(String text, int fromColor, int toColor){
