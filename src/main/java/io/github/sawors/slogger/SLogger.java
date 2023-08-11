@@ -52,8 +52,8 @@ public class SLogger {
      * Warning : Please note that <b>this method is not designed for fast logging</b> as it has to fetch the stacktrace, which can impact performances. <b>To do quick successive logging with good performances please use logAdmin(object, true)</b> as it will disable all the slow features
      * @param object The object to print. This method will print the result of object.toString().
      */
-    public void logAdmin(Object object){
-        logAdmin(object,true);
+    public void log(Object object){
+        log(object,true);
     }
     
     /**
@@ -61,8 +61,8 @@ public class SLogger {
      * @param object The object to print. This method will print the result of object.toString().
      * @param simplified Whether to use the simplified printing mode or not. <b>The simplified mode is much faster than the default one (up to 6 times faster)</b>
      */
-    public void logAdmin(Object object, boolean simplified){
-        logAdmin(object,simplified,!simplified,!simplified);
+    public void log(Object object, boolean simplified){
+        log(object,simplified,!simplified,!simplified);
     }
     
     /**
@@ -72,7 +72,7 @@ public class SLogger {
      * @param includeLine Should the console log contain the class and the line number where this method has been used. <i>(high performance impact)</i>
      * @param color Should the player output (if sendPlayer = true) be colored with a fancy gradient. <i>(low performance impact)</i>
      */
-    public void logAdmin(Object object, boolean sendPlayer, boolean includeLine, boolean color) {
+    public void log(Object object, boolean sendPlayer, boolean includeLine, boolean color) {
         
         String objectString = object != null ? getFormattedString(object) : "⚠ null ⚠";
         
